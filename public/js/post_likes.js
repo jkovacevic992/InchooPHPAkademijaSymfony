@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function f() {
     $('#post-likes').on('click', function (e) {
         e.preventDefault();
         var link = $(e.currentTarget);

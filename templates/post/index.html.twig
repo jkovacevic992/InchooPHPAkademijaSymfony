@@ -9,7 +9,11 @@
 
         {{ form_end(form) }}
         {{ form_start(tagForm) }}
-        {{ form_row(tagForm.content) }}
+        <button id="show_tags" class="btn btn-primary" formnovalidate>Tags</button>
+        <div style="display: none" id="enter_tags">{{ form_row(tagForm.content) }}
+
+            <button type="submit" class="btn btn-primary" formnovalidate>Save Tag</button>
+        </div>
 
         {{ form_end(tagForm) }}
     {% endif %}
@@ -27,4 +31,9 @@
             </div>
         </div>
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/tags.js') }}"></script>
 {% endblock %}
