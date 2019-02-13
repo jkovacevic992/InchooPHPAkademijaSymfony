@@ -10,10 +10,12 @@ use App\Form\PostFormType;
 use App\Form\TagFormType;
 use App\Repository\PostLikeRepository;
 use App\Repository\PostRepository;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -130,5 +132,21 @@ class PostController extends AbstractController
         return new JsonResponse([
             'likes' => $post->getLikesCount()
         ]);
+    }
+
+    public function searchBar()
+    {
+        $form = $this->createFormBuilder(null)
+            ->add('query',\Symfony\Component\Form\Extension\Core\Type\TextType::class)
+            ->add('search', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+            ->getForm();
+
+        return $this->render('post/searchBar.html.twig',[
+            'form' => $form->createView()
+    ]);
     }
 }
