@@ -7,6 +7,7 @@ use App\Entity\Post;
 use App\Entity\PostLike;
 use App\Form\CommentFormType;
 use App\Form\PostFormType;
+use App\Form\TagFormType;
 use App\Repository\PostLikeRepository;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +31,10 @@ class PostController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository)
     {
         $form = $this->createForm(PostFormType::class);
+        $tagForm = $this->createForm(TagFormType::class);
+        $tagForm->handleRequest($request);
         $form->handleRequest($request);
+
         if ($this->isGranted('ROLE_USER') && $form->isSubmitted() && $form->isValid()) {
             /** @var Post $post */
             $post = $form->getData();
@@ -45,7 +49,8 @@ class PostController extends AbstractController
 
         return $this->render('post/index.html.twig', [
             'form' => $form->createView(),
-            'posts' => $posts
+            'posts' => $posts,
+            'tagForm' => $tagForm->createView()
         ]);
     }
 

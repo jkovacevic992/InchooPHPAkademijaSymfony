@@ -6,7 +6,12 @@
         {{ form_start(form) }}
             {{ form_row(form.content) }}
             <button type="submit" class="btn btn-primary" formnovalidate>Save</button>
+
         {{ form_end(form) }}
+        {{ form_start(tagForm) }}
+        {{ form_row(tagForm.content) }}
+
+        {{ form_end(tagForm) }}
     {% endif %}
 
     {% for post in posts %}
