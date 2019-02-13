@@ -5,17 +5,17 @@
     {% if is_granted('ROLE_USER') %}
         {{ form_start(form) }}
             {{ form_row(form.content) }}
-            <button type="submit" class="btn btn-primary" formnovalidate>Save</button>
+        <ul class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}">
+            {# iterate over each existing tag and render its only field: name #}
+            {% for tag in form.tags %}
+                <li>{{ form_row(tag.name) }}</li>
+            {% endfor %}
+        </ul>
+        <button type="submit" class="btn btn-primary" formnovalidate>Save</button>
+
 
         {{ form_end(form) }}
-        {{ form_start(tagForm) }}
-        <button id="show_tags" class="btn btn-primary" formnovalidate>Tags</button>
-        <div style="display: none" id="enter_tags">{{ form_row(tagForm.content) }}
 
-            <button type="submit" class="btn btn-primary" formnovalidate>Save Tag</button>
-        </div>
-
-        {{ form_end(tagForm) }}
     {% endif %}
 
     {% for post in posts %}

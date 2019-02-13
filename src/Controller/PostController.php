@@ -31,26 +31,27 @@ class PostController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository)
     {
         $form = $this->createForm(PostFormType::class);
-        $tagForm = $this->createForm(TagFormType::class);
-        $tagForm->handleRequest($request);
         $form->handleRequest($request);
+
 
         if ($this->isGranted('ROLE_USER') && $form->isSubmitted() && $form->isValid()) {
             /** @var Post $post */
+
             $post = $form->getData();
             $post->setUser($this->getUser());
             $entityManager->persist($post);
             $entityManager->flush();
             $this->addFlash('success', 'New post created!');
+
             return $this->redirectToRoute('post_index');
         }
+
 
         $posts = $postRepository->getAllInLastWeek();
 
         return $this->render('post/index.html.twig', [
             'form' => $form->createView(),
-            'posts' => $posts,
-            'tagForm' => $tagForm->createView()
+            'posts' => $posts
         ]);
     }
 

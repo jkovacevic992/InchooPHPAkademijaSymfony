@@ -27,8 +27,10 @@ class Tag
      * @ORM\JoinColumn(nullable=false)
      */
     private $post;
-
-    private $content;
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $name;
 
     /**
      * @return mixed
@@ -65,17 +67,17 @@ class Tag
     /**
      * @return mixed
      */
-    public function getContent()
+    public function getName()
     {
-        return $this->content;
+        return $this->name;
     }
 
     /**
-     * @param mixed $content
+     * @param mixed $name
      */
-    public function setContent($content): void
+    public function setName($name): void
     {
-        $this->content = $content;
+        $this->name = $name;
     }
 
 
