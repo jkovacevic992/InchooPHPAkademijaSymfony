@@ -24,9 +24,11 @@ class PostFormType extends AbstractType
             'entry_type' => TagFormType::class,
             'entry_options' => ['label' => false],
             'allow_add' => true,
-            'by_reference' => false
+            'by_reference' => false,
+            'label' => false
 
         ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
