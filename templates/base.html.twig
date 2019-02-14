@@ -36,12 +36,13 @@
                 </li>
             {% endif %}
         </ul>
-        {{ render(controller(
-            'App\\Controller\\PostController::searchBar'
-        )) }}
+
     </div>
 </nav>
 <div class="container">
+
+
+
     {% for message in app.flashes('success') %}
         <div class="row mt-3">
             <div class="col">
@@ -50,6 +51,7 @@
                 </div>
             </div>
         </div>
+
     {% endfor %}
 
     {% block body %}{% endblock %}

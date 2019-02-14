@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+    {{ form(formSearch) }}
     {% if is_granted('ROLE_USER') %}
         {{ form_start(form) }}
             {{ form_row(form.content) }}

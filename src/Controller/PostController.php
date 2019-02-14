@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\PostLike;
+use App\Entity\Tag;
 use App\Form\CommentFormType;
 use App\Form\PostFormType;
 use App\Form\TagFormType;
@@ -16,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,28 +34,39 @@ class PostController extends AbstractController
      */
     public function index(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository)
     {
+
         $form = $this->createForm(PostFormType::class);
         $form->handleRequest($request);
-
-
         if ($this->isGranted('ROLE_USER') && $form->isSubmitted() && $form->isValid()) {
             /** @var Post $post */
-
             $post = $form->getData();
             $post->setUser($this->getUser());
             $entityManager->persist($post);
             $entityManager->flush();
             $this->addFlash('success', 'New post created!');
-
             return $this->redirectToRoute('post_index');
         }
 
+        $formSearch = $this->createFormBuilder(null)
+            ->add('query', TextareaType::class)
+            ->add('search', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
 
-        $posts = $postRepository->getAllInLastWeek();
-
+            ->getForm();
+        $formSearch->handleRequest($request);
+        if($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $postsFind = $formSearch->getData();
+            $posts = $postRepository->getAllPostsByTag($postsFind['query']);
+        } else {
+            $posts = $postRepository->getAllInLastWeek();
+        }
         return $this->render('post/index.html.twig', [
             'form' => $form->createView(),
-            'posts' => $posts
+            'posts' => $posts,
+            'formSearch' => $formSearch->createView()
         ]);
     }
 
@@ -134,19 +147,23 @@ class PostController extends AbstractController
         ]);
     }
 
-    public function searchBar()
-    {
-        $form = $this->createFormBuilder(null)
-            ->add('query',\Symfony\Component\Form\Extension\Core\Type\TextType::class)
-            ->add('search', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-primary'
-                ]
-            ])
-            ->getForm();
 
-        return $this->render('post/searchBar.html.twig',[
-            'form' => $form->createView()
-    ]);
+    /**
+     * @Route("/search", name="search")
+     *
+     */
+    public function searchTags(Request $request)
+    {
+
+        $search = $request->get('query');
+        $result = $this->getDoctrine()
+            ->getRepository(Tag::class)
+            ->findBy(['name' =>$search]);
+
+        foreach($result as $res) {
+            echo $res->getPost()->getContent();
+        }
+
     }
+
 }

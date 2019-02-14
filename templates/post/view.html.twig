@@ -23,6 +23,18 @@
                 {% else %}
                     Likes: {{ post.likesCount }}
                 {% endif %}
+
+                {% for tag in post.tags %}
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text">{{ tag.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
