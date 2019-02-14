@@ -5,6 +5,7 @@ namespace App\Form;
 
 
 use App\Entity\Post;
+use App\Entity\Tag;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +26,10 @@ class PostFormType extends AbstractType
             'entry_options' => ['label' => false],
             'allow_add' => true,
             'by_reference' => false,
-            'label' => false
+            'label' => false,
+            'delete_empty' => function (Tag $tags = null) {
+                return null === $tags || empty($tags->getName());
+            }
 
         ]);
 
