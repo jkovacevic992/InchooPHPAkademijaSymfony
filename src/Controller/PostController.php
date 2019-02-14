@@ -59,7 +59,7 @@ class PostController extends AbstractController
         $formSearch->handleRequest($request);
         if($formSearch->isSubmitted() && $formSearch->isValid()) {
             $postsFind = $formSearch->getData();
-            $posts = $postRepository->getAllPostsByTag($postsFind['query']);
+            $posts = $postRepository->getPostsByTag($postsFind['query']);
         } else {
             $posts = $postRepository->getAllInLastWeek();
         }
@@ -148,22 +148,5 @@ class PostController extends AbstractController
     }
 
 
-    /**
-     * @Route("/search", name="search")
-     *
-     */
-    public function searchTags(Request $request)
-    {
-
-        $search = $request->get('query');
-        $result = $this->getDoctrine()
-            ->getRepository(Tag::class)
-            ->findBy(['name' =>$search]);
-
-        foreach($result as $res) {
-            echo $res->getPost()->getContent();
-        }
-
-    }
 
 }

@@ -18,7 +18,6 @@ class PostRepository extends ServiceEntityRepository
     public function getAllInLastWeek()
     {
         return $this->createQueryBuilder('p')
-            //->innerJoin('App\Entity\Tag', 't','WITH', 'p.id = t.post')
             ->where('p.createdAt <= :endWeek')
             ->setParameter('endWeek', new \DateTime('now +7 day'))
             ->setMaxResults(100)
@@ -27,7 +26,7 @@ class PostRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getAllPostsByTag($tag)
+    public function getPostsByTag($tag)
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('App\Entity\Tag','t','WITH','p.id = t.post')
